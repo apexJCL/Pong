@@ -11,9 +11,15 @@ Recibe:
   - especifica con el tamaño de la pantalla
 
 ]]
-function Paleta:nuevo(imagen, px, teclaUp, teclaDown, limSup, limInf)
+function Paleta:nuevo(imagen, px, teclaUp, teclaDown, limSup, limInf, color)
   -- Local porque sólo se usará aquí, no en otro lado
   local w, h = imagen:getDimensions()
+  local default_color = {
+    r = 255,
+    g = 255,
+    b = 255,
+    a = 255
+  }
   propiedades = {
     x = px,
     y = 0,
@@ -27,14 +33,23 @@ function Paleta:nuevo(imagen, px, teclaUp, teclaDown, limSup, limInf)
     -- El sprite de la paleta
     drawable = imagen,
     minY = limSup or h/2,
-    maxY = love.graphics.getHeight() - h/2
+    maxY = love.graphics.getHeight() - h/2,
+    c = color or default_color
   }
   self.__index = self
   return setmetatable(propiedades, self)
 end
 
+function Paleta:setColor (color)
+  self.c = color
+end
+
 function Paleta:dibujar()
+  -- Cambia el color
+  love.graphics.setColor(self.c.r, self.c.g, self.c.b, self.c.a)
   love.graphics.draw(self.drawable, self.x, self.y, 0, 1, 1, self.ancho / 2, self.alto / 2)
+  -- Restauramos el color de dibujado
+  love.graphics.setColor(255, 255, 255, 255)
 end
 
 function Paleta:actualizar(dt)
