@@ -27,11 +27,11 @@ end
 function Paleta:actualizar(dt)
 
   if love.keyboard.isDown (self.tDown) then
-    self.y = self.y - (self.velocidad * dt)
+    self.y = self.y + (self.velocidad * dt)
   end
 
   if love.keyboard.isDown (self.tUp) then
-    self.y = self.y + (self.velocidad * dt)
+    self.y = self.y - (self.velocidad * dt)
   end
 
 end
