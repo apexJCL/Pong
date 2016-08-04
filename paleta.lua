@@ -80,4 +80,15 @@ function Paleta:debug ()
   end
   local vx = self.x + self.ancho
   love.graphics.print("v: "..self.velocidad, vx, self.y)
+  -- Abs coordinates
+  local ax, ay = self:getAbsCoord()
+  love.graphics.setColor(255, 0, 0, 255)
+  love.graphics.line(ax, ay, ax + self.ancho, ay)
+  love.graphics.line(ax, ay, ax, self.alto + ay)
+end
+
+
+function Paleta:getAbsCoord ()
+  local x, y = self.x - self.ancho / 2, self.y - self.alto / 2
+  return x, y
 end

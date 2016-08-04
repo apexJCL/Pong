@@ -1,4 +1,4 @@
-debug = false
+debug = true
 
 --[[
 Aquí se cargan los datos del juego, entre otras cosas
@@ -9,6 +9,7 @@ function love.load(arg)
   require('paleta')
   require('nivelBase')
   require('niveles/nivel0')
+  require('niveles/nivelMenu')
 
   nivelActual = Nivel0:inicializar()
 end
