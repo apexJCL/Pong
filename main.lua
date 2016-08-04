@@ -1,3 +1,5 @@
+debug = false
+
 --[[
 Aquí se cargan los datos del juego, entre otras cosas
 ]]
@@ -17,6 +19,8 @@ function love.load(arg)
   -- Crear la paleta
   paleta_a = Paleta:nuevo(imagen_paleta_a, 0, 'w', 's')
   paleta_a:setColor(color)
+  -- Fuente menu
+  font = love.graphics.newFont('assets/fonts/Maestro-Regular.ttf', 96)
 end
 
 --[[

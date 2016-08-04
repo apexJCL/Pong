@@ -21,7 +21,7 @@ function Paleta:nuevo(imagen, px, teclaUp, teclaDown, limSup, limInf, color)
     a = 255
   }
   propiedades = {
-    x = px,
+    x = px + w/2,
     y = 0,
     ancho = w,
     alto = h,
@@ -50,6 +50,11 @@ function Paleta:dibujar()
   love.graphics.draw(self.drawable, self.x, self.y, 0, 1, 1, self.ancho / 2, self.alto / 2)
   -- Restauramos el color de dibujado
   love.graphics.setColor(255, 255, 255, 255)
+
+  -- debug
+  if debug then
+    self:debug()
+  end
 end
 
 function Paleta:actualizar(dt)
@@ -62,4 +67,17 @@ function Paleta:actualizar(dt)
     self.y = self.y - (self.velocidad * dt)
   end
 
+end
+
+function Paleta:debug ()
+  -- eje x
+  love.graphics.line(self.x, self.y , love.graphics.getWidth(), self.y)
+  -- velocidad
+  if self.x < 0 then
+    local vx = self.ancho
+  elseif self.x > love.graphics.getWidth() then
+    local vx = self.x - self.ancho / 2
+  end
+  local vx = self.x + self.ancho
+  love.graphics.print("v: "..self.velocidad, vx, self.y)
 end
