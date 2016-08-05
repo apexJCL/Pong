@@ -34,7 +34,8 @@ function Paleta:nuevo(imagen, px, teclaUp, teclaDown, limSup, limInf, color)
     drawable = imagen,
     minY = limSup or h/2,
     maxY = love.graphics.getHeight() - h/2,
-    c = color or default_color
+    c = color or default_color,
+    puntos = 0
   }
   self.__index = self
   return setmetatable(propiedades, self)

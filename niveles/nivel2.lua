@@ -1,4 +1,6 @@
 require ('nivelBase')
+local screen = require 'lib/shack'
+screen:setDimensions(love.graphics.getDimensions())
 
 Nivel2 = Nivel:nuevo()
 
@@ -10,7 +12,7 @@ function Nivel2:inicializar ()
   local margen = 10
 
   -- Creamos las paletas
-  local paleta_a = Paleta:nuevo(imagen_paleta, 0, 'w', 's', h/2, love.graphics.getHeight() - (h / 2))
+  paleta_a = Paleta:nuevo(imagen_paleta, 0, 'w', 's', h/2, love.graphics.getHeight() - (h / 2))
   -- Sobre-escribimos los valores con los reales internos de la imagen
   paleta_a.x = w / 2 + margen
   paleta_a.ancho, paleta_a.alto = w, h
@@ -23,7 +25,7 @@ function Nivel2:inicializar ()
     a = 255
   })
 
-  local paleta_b = Paleta:nuevo(imagen_paleta, 0, 'up', 'down', h/2, love.graphics.getHeight() - (h / 2))
+  paleta_b = Paleta:nuevo(imagen_paleta, 0, 'up', 'down', h/2, love.graphics.getHeight() - (h / 2))
   -- Sobre-escribimos los valores con los reales internos de la imagen
   paleta_b.x = love.graphics.getWidth() - w/2 - margen
   paleta_b.ancho, paleta_b.alto = w, h
@@ -51,6 +53,7 @@ function Nivel2:inicializar ()
     local maxY = h - paleta_a.alto / 2
     paleta_a.x, paleta_a.maxY = margen + paleta_a.ancho / 2, maxY
     paleta_b.x, paleta_b.maxY = w - paleta_b.ancho / 2 - margen, maxY
+    screen.setDimensions(w, h)
   end
 
   -- Pelota
@@ -88,6 +91,13 @@ function Nivel2:inicializar ()
     paleta_a,
     paleta_b
   }
+  -- Fuente
+  self.f = love.graphics.newFont('assets/fonts/ps2p.ttf', 96)
+
+  -- Ultima configuración
+  pelota.velocidad_x, pelota.velocidad_y = 400, 300
+  paleta_a.velocidad = 400
+  paleta_b.velocidad = 400
 
   -- Agregamos
   self:agregarActor(paleta_a)
@@ -99,12 +109,43 @@ function Nivel2:inicializar ()
 end
 
 function Nivel2:actualizar (dt)
+
+  -- Actualizar
+  screen:update(dt)
+
   if pelota:pegando(paletas) then
+    screen:setRotation(pelota.direccion_x * 0.3)
+    screen:setShake(20)
     pelota:aumentarVelocidad(dt, 500)
     particula_choque.sistema:setPosition(pelota.x, pelota.y)
     particula_choque:emitir(200)
   end
+
+  -- Para ver si hay que aumentar la puntuación
+  local d = pelota:reiniciar()
+  if d < 0 then
+    paleta_a.puntos = paleta_a.puntos + 1
+  elseif d > 0 then
+    paleta_b.puntos = paleta_b.puntos + 1
+  end
+
   for k,actor in pairs(self.actores) do
     actor:actualizar(dt)
+  end
+end
+
+
+function Nivel2:dibujar ()
+  screen:apply()
+  -- Puntuacion
+  love.graphics.setFont(self.f)
+  love.graphics.printf(
+    paleta_a.puntos..' - '..paleta_b.puntos,
+    0,
+    40,
+    love.graphics.getWidth(),
+    'center')
+  for k,actor in pairs(self.actores) do
+    actor:dibujar()
   end
 end

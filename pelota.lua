@@ -30,7 +30,6 @@ function Pelota:dibujar()
 end
 
 function Pelota:actualizar(dt)
-  self:reiniciar()
   self:botar()
 	self.y = self.y + (self.velocidad_y * dt) * self.direccion_y
   self.x = self.x + (self.velocidad_x * dt) * self.direccion_x
@@ -51,10 +50,12 @@ function Pelota:checkCollision(x1,y1,w1,h1, x2,y2,w2,h2)
 end
 
 function Pelota:reiniciar()
-  if self.x <= 0 or self.x >= love.graphics.getWidth()  then
+  if self.x < 0 or self.x > love.graphics.getWidth()  then
     self.x = love.graphics.getHeight() / 2
     self.direccion_x = self.direccion_x * -1
+    return self.direccion_x
   end
+  return 0
 end
 
 function Pelota:pegando(paletas)

@@ -6,7 +6,8 @@ Sirve para describir el comportamiento del juego en cada modo o nivel
 ]]
 function Nivel:nuevo ()
   propiedades = {
-    actores = {}
+    actores = {},
+    f = love.graphics.newFont(80)
   }
   self.__index = self
   return setmetatable(propiedades, self)
