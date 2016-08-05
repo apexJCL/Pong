@@ -1,4 +1,4 @@
-debug = true
+debug = false
 
 --[[
 Aquí se cargan los datos del juego, entre otras cosas
@@ -7,11 +7,13 @@ function love.load(arg)
   -- Cargar scripts de paleta y pelota
   require('pelota')
   require('paleta')
+  require('particula')
   require('nivelBase')
   require('niveles/nivel0')
-  require('niveles/nivelMenu')
+  require('niveles/nivel2')
 
-  nivelActual = Nivel0:inicializar()
+  nivelActual = Nivel2:nuevo()
+  nivelActual = Nivel2:inicializar()
 end
 
 --[[

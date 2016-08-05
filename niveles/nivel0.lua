@@ -12,14 +12,14 @@ function Nivel:inicializar ()
     r = 16,
     g = 16,
     b = 214,
-    a = 128
+    a = 255
   }
   -- Crear la paleta
-  local paleta_a = Paleta:nuevo(imagen_paleta_a, 0, 'w', 's')
+  paleta_a = Paleta:nuevo(imagen_paleta_a, 0, 'w', 's')
   paleta_a:setColor(color)
+  paleta_b = Paleta:nuevo(imagen_paleta_a, love.graphics.getWidth() - w, 'up', 'down')
 
-  local paleta_b = Paleta:nuevo(imagen_paleta_a, love.graphics.getWidth() - w, 'up', 'down')
-  -- Agregar actor
+  --Agregar a actores
   self:agregarActor(paleta_a)
   self:agregarActor(paleta_b)
   return self
