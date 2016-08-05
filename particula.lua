@@ -7,12 +7,18 @@ Particula = {}
   imagen - Imagen a usar para la partícula
   buffer - Cantidad de partículas máximas a emitir
 ]]
-function Particula:nuevo(imagen, buffer)
+function Particula:nuevo(imagen, buffer, color)
   propiedades  = {
     sistema = love.graphics.newParticleSystem(imagen, buffer),
     x = 0,
     y = 0,
-    buffer = buffer
+    buffer = buffer,
+    c = color or {
+      r = 255,
+      g = 255,
+      b = 255,
+      a = 255
+    }
   }
   self.__index = self
   return setmetatable(propiedades, self)
@@ -35,8 +41,7 @@ function Particula:inicializar(xmin, xmax, ymin, ymax)
   -- Transparencia
   self.sistema:setColors(255, 255, 255, 255, 255, 255, 255, 0)
   -- Tiempo de vida
-  self.sistema:setParticleLifetime(0.5, 1)
-  -- Rango de emisión
+  self.sistema:setParticleLifetime(0.1, 1)
   -- Velocidad
   self.sistema:setLinearAcceleration(xmin, ymin, xmax, ymax)
 end
@@ -57,7 +62,9 @@ end
   Dibuja el sistema de partículas en pantalla, llamar en love.draw()
 ]]
 function Particula:dibujar()
+  love.graphics.setColor(self.c.r, self.c.g, self.c.b, self.c.a)
   love.graphics.draw(self.sistema, self.x, self.y, 0, 1, 1)
+  love.graphics.setColor(255, 255, 255, 255)
 end
 
 

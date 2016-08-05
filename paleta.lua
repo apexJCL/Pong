@@ -81,9 +81,14 @@ function Paleta:debug ()
   love.graphics.print("v: "..self.velocidad, vx, self.y)
   -- Abs coordinates
   local ax, ay = self:getAbsCoord()
-  love.graphics.setColor(255, 0, 0, 255)
-  love.graphics.line(ax, ay, ax + self.ancho, ay)
-  love.graphics.line(ax, ay, ax, ay + self.alto)
+  love.graphics.setColor(255, 0, 0, 128)
+  love.graphics.polygon(
+    'fill',
+    ax, ay,
+    ax + self.ancho, ay,
+    ax + self.ancho, ay + self.alto,
+    ax, ay + self.alto)
+
   -- Info
   love.graphics.print("ancho: "..self.ancho..", alto: "..self.alto, vx, self.y + 20)
 end

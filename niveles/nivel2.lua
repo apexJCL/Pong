@@ -55,23 +55,56 @@ function Nivel2:inicializar ()
 
   -- Pelota
   local imagen_pelota = love.graphics.newImage('assets/particula_blanca.png')
-  local pelota = Pelota:nuevo(imagen_pelota)
+  pelota = Pelota:nuevo(imagen_pelota)
 
   -- Partìcula
-  local particula = Particula:nuevo(love.graphics.newImage('assets/particula_blanca.png'), 300)
-  particula:inicializar(-10, -pelota.alto * 2, 10, pelota.alto * 2)
+  local particula_pelota = Particula:nuevo(love.graphics.newImage('assets/particula_blanca.png'), 300)
+  particula_pelota:inicializar(0, -pelota.alto * 2, 0, pelota.alto * 2)
 
-  -- Sobreescribimos la funcion de la particula
-  function particula:actualizar (dt)
+  particula_choque = Particula:nuevo(love.graphics.newImage('assets/particula_blanca.png'), 200)
+  particula_choque:inicializar(0, -1000, 100, 1000)
+  particula_choque.c = {
+    r = 250,
+    g = 250,
+    b =10,
+    a = 255
+  }
+  -- Configuración extra de la particula de choque
+  particula_choque.sistema:setSizes(0.1, 0.2, 0.4, 0.6, 0.8)
+  particula_choque.sistema:setSizeVariation(1)
+
+  -- Sobreescribimos la funcion de la particula_pelota
+  function particula_pelota:actualizar (dt)
     self.sistema:setPosition(pelota.x, pelota.y)
     self.sistema:update(dt)
     self:emitir(1)
   end
 
+  function particula_choque:actualizar (dt)
+    self.sistema:update(dt)
+  end
+
+  paletas = {
+    paleta_a,
+    paleta_b
+  }
+
   -- Agregamos
   self:agregarActor(paleta_a)
   self:agregarActor(paleta_b)
   self:agregarActor(pelota)
-  self:agregarActor(particula)
+  self:agregarActor(particula_pelota)
+  self:agregarActor(particula_choque)
   return self
+end
+
+function Nivel2:actualizar (dt)
+  if pelota:pegando(paletas) then
+    pelota:aumentarVelocidad(dt, 500)
+    particula_choque.sistema:setPosition(pelota.x, pelota.y)
+    particula_choque:emitir(200)
+  end
+  for k,actor in pairs(self.actores) do
+    actor:actualizar(dt)
+  end
 end
